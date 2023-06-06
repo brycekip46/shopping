@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopping/pages/myStorepage.dart';
+import 'package:shopping/pages/shoppingicon.dart';
+import 'package:shopping/pages/productlist.dart';
 
 final GlobalKey<ShoppingCartIconState> shoppingcart =
     GlobalKey<ShoppingCartIconState>();
@@ -9,6 +12,6 @@ void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Store',
-    home: MyStorePage(),
+    home: MYStorePage(),
   ));
 }
