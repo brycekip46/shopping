@@ -64,7 +64,18 @@ class ProductTile extends StatelessWidget {
         vertical: 15,
         horizontal: 40,
       ),
-      color: Color(0xfff8f8f8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2.0,
+            blurRadius: 5.0,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Padding(
           padding: const EdgeInsets.all(20),

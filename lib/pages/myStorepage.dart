@@ -81,7 +81,7 @@ class MYStorePageState extends State<MYStorePage> {
           ),
           const SliverToBoxAdapter(
             child: ProductListWidget(),
-          ),
+          )
         ],
       ),
     );

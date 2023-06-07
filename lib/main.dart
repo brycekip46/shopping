@@ -3,7 +3,7 @@ import 'package:shopping/data/appstate.dart';
 import 'package:shopping/pages/myStorepage.dart';
 
 void main() {
-  runApp(const AppStateWidget(
+  runApp(AppStateWidget(
     child: MaterialApp(
       scrollBehavior: ConstantScrollBehavior(),
       debugShowCheckedModeBanner: false,
