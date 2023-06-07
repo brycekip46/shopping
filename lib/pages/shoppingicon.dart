@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ShoppingCartIcon extends StatefulWidget {
-  const ShoppingCartIcon({super.key});
+import '../data/appstate.dart';
 
-  @override
-  State<ShoppingCartIcon> createState() => ShoppingCartIconState();
-}
-
-class ShoppingCartIconState extends State<ShoppingCartIcon> {
-  Set<String> get _itemsInCart => itemsInCart;
-  Set<String> itemsInCart = <String>{};
-
-  set _itemsInCart(Set<String> value) {
-    setState(() {
-      itemsInCart = value;
-    });
-  }
+class ShoppingCartIcon extends StatelessWidget {
+  const ShoppingCartIcon({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bool hasPurchase = _itemsInCart.isNotEmpty;
+    final Set<String> itemsInCart = AppStateScope.of(context).itemsInCart;
+    final bool hasPurchase = itemsInCart.isNotEmpty;
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -38,7 +28,7 @@ class ShoppingCartIconState extends State<ShoppingCartIcon> {
               radius: 10,
               foregroundColor: Colors.white,
               child: Text(
-                _itemsInCart.length.toString(),
+                itemsInCart.length.toString(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12.0,

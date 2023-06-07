@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping/main.dart';
+import 'package:shopping/data/appstate.dart';
 import 'package:shopping/data/server.dart';
 import 'package:shopping/pages/shoppingicon.dart';
 import 'package:shopping/pages/productlist.dart';
@@ -8,27 +8,27 @@ class MYStorePage extends StatefulWidget {
   const MYStorePage({super.key});
 
   @override
-  State<MYStorePage> createState() => _MYStorePageState();
+  MYStorePageState createState() => MYStorePageState();
 }
 
-class _MYStorePageState extends State<MYStorePage> {
+class MYStorePageState extends State<MYStorePage> {
   bool inSearch = false;
   final TextEditingController controller = TextEditingController();
   final FocusNode focusNode = FocusNode();
 
-  void toggleSearch() {
+  void toggleSearch(BuildContext context) {
     setState(() {
       inSearch = !inSearch;
     });
+    AppStateWidget.of(context).setProductList(Server.getProductList());
     controller.clear();
-    productList.currentState!.productList = Server.getProductList();
   }
 
-  void handleSearch() {
+  void handleSearch(BuildContext context) {
     focusNode.unfocus();
     final String filter = controller.text;
-    productList.currentState!.productList =
-        Server.getProductList(filter: filter);
+    AppStateWidget.of(context)
+        .setProductList(Server.getProductList(filter: filter));
   }
 
   @override
@@ -46,18 +46,18 @@ class _MYStorePageState extends State<MYStorePage> {
                     autofocus: true,
                     focusNode: focusNode,
                     controller: controller,
-                    onSubmitted: (_) => handleSearch(),
+                    onSubmitted: (_) => handleSearch(context),
                     decoration: InputDecoration(
                       hintText: 'Search store',
                       prefixIcon: IconButton(
                           icon: Icon(Icons.search),
                           onPressed: () {
-                            handleSearch();
+                            handleSearch(context);
                           }),
                       suffixIcon: IconButton(
                         icon: Icon(Icons.close),
                         onPressed: () {
-                          toggleSearch();
+                          toggleSearch(context);
                         },
                       ),
                     ),
@@ -71,16 +71,16 @@ class _MYStorePageState extends State<MYStorePage> {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    toggleSearch();
+                    toggleSearch(context);
                   },
                 ),
-              ShoppingCartIcon(key: shoppingcart),
+              ShoppingCartIcon(),
             ],
             backgroundColor: Colors.white,
             pinned: true,
           ),
-          SliverToBoxAdapter(
-            child: ProductListWidget(key: productList),
+          const SliverToBoxAdapter(
+            child: ProductListWidget(),
           ),
         ],
       ),

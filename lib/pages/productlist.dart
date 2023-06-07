@@ -1,56 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:shopping/main.dart';
+import 'package:shopping/data/appstate.dart';
 import 'package:shopping/data/product.dart';
 import 'package:shopping/data/server.dart';
 
-class ProductListWidget extends StatefulWidget {
-  const ProductListWidget({super.key});
+class ProductListWidget extends StatelessWidget {
+  const ProductListWidget({Key? key}) : super(key: key);
 
-  @override
-  State<ProductListWidget> createState() => ProductListWidgetState();
-}
-
-class ProductListWidgetState extends State<ProductListWidget> {
-  List<String> get _productList => productList;
-  List<String> productList = Server.getProductList();
-
-  set _productList(List<String> value) {
-    setState(() {
-      productList = value;
-    });
+  void _handleAddToCart(String id, BuildContext context) {
+    AppStateWidget.of(context).addToCart(id);
   }
 
-  Set<String> get _itemsInCart => itemsInCart;
-  Set<String> itemsInCart = <String>{};
-
-  set _itemsInCart(Set<String> value) {
-    setState(() {
-      itemsInCart = value;
-    });
+  void _handleRemoveFromCart(String id, BuildContext context) {
+    AppStateWidget.of(context).removeFromCart(id);
   }
 
-  void handleAddToCart(String id) {
-    _itemsInCart = itemsInCart..add(id);
-    shoppingcart.currentState!.itemsInCart = _itemsInCart;
-  }
-
-  void handleRemoveFromCart(String id) {
-    _itemsInCart = itemsInCart..remove(id);
-    shoppingcart.currentState!.itemsInCart = _itemsInCart;
-  }
-
-  Widget buildProductTile(String id) {
+  Widget _buildProductTile(String id, BuildContext context) {
     return ProductTile(
         product: Server.getProductById(id),
-        purchased: _itemsInCart.contains(id),
-        onAddToCart: () => handleAddToCart(id),
-        onRemoveFromCart: () => handleRemoveFromCart(id));
+        purchased: AppStateScope.of(context).itemsInCart.contains(id),
+        onAddToCart: () => _handleAddToCart(id, context),
+        onRemoveFromCart: () => _handleRemoveFromCart(id, context));
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<String> productList = AppStateScope.of(context).productList;
+
     return Column(
-      children: productList.map(buildProductTile).toList(),
+      children:
+          productList.map((id) => _buildProductTile(id, context)).toList(),
     );
   }
 }
@@ -100,7 +78,9 @@ class ProductTile extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(20),
           child: OutlinedButton(
-            child: purchased ? Text("remove from cart") : Text("Add to cart"),
+            child: purchased
+                ? const Text("remove from cart")
+                : Text("Add to cart"),
             style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.resolveWith(
                     (states) => getButtonColor(states)),
