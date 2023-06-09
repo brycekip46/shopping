@@ -23,18 +23,6 @@ class AppState {
   bool isInCart(String productId) {
     return itemsInCart.contains(productId);
   }
-
-  AppState toggleInCart(String productId) {
-    if (isInCart(productId)) {
-      final updatedCart = Set<String>.from(itemsInCart);
-      updatedCart.remove(productId);
-      return copyWith(itemsInCart: updatedCart);
-    } else {
-      final updatedCart = Set<String>.from(itemsInCart);
-      updatedCart.add(productId);
-      return copyWith(itemsInCart: updatedCart);
-    }
-  }
 }
 
 class AppStateScope extends InheritedWidget {
